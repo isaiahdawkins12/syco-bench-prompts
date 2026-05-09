@@ -154,23 +154,29 @@ def read_system_prompt(filename: str) -> str:
         return None
 
 def get_output_dir(model: str, timestamp: str = None, system_prompt: str = None) -> str:
-    """Create and return the output directory path for the current run."""
+    """Create and return the output directory path for the current run.
+
+    Honors the SYCO_OUTPUT_DIR environment variable as the parent directory
+    (defaults to 'output' for backward compatibility with upstream syco-bench).
+    """
     if timestamp is None:
         timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-    
+
+    base_dir = os.environ.get('SYCO_OUTPUT_DIR', 'output')
+
     # Sanitize model name by replacing invalid characters
     model_name = model.replace('/', '_')
     # Replace any other invalid characters with underscore
     model_name = re.sub(r'[<>:"/\\|?*]', '_', model_name)
-    
+
     # Add system prompt name to directory if provided
     if system_prompt:
         prompt_name = os.path.splitext(os.path.basename(system_prompt))[0]
         prompt_name = re.sub(r'[<>:"/\\|?*]', '_', prompt_name)
-        output_dir = os.path.join('output', f"{timestamp}_{model_name}_{prompt_name}")
+        output_dir = os.path.join(base_dir, f"{timestamp}_{model_name}_{prompt_name}")
     else:
-        output_dir = os.path.join('output', f"{timestamp}_{model_name}")
-    
+        output_dir = os.path.join(base_dir, f"{timestamp}_{model_name}")
+
     os.makedirs(output_dir, exist_ok=True)
     return output_dir
 

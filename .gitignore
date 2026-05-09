@@ -1,3 +1,14 @@
-__pycache__/ 
+# Secrets — never commit
 .env
-env/
+env/.env
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+
+# Smoke-test outputs (raw cells outside our experiment_results/)
+output/
+
+# Experiment intermediates we'd rather not commit
+experiment_results/logs/

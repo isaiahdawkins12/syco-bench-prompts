@@ -52,7 +52,7 @@ def run_test(script_name: str, model: str, limit: int, logger: logging.Logger, t
     logger.info(f"\nRunning {script_name}...")
     sys.stdout.flush()  # Ensure previous output is flushed
     
-    cmd = ["python", "-u", script_name, "--model", model, "--timestamp", timestamp]  # Added -u for unbuffered output
+    cmd = [sys.executable, "-u", script_name, "--model", model, "--timestamp", timestamp]  # Use venv's python
     if limit:
         cmd.extend(["--limit", str(limit)])
     if system_prompt:
