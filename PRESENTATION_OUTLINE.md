@@ -4,19 +4,19 @@
 **Slides:** ~14 (≈90 seconds each)
 **Audience:** Trustworthy AI class — peers + instructor
 
-Each slide block below lists: (1) what's on the slide, (2) what the speaker says, (3) any visual asset and where it lives in the repo.
+Each slide block lists: (1) what's on the slide, (2) what the speaker says, (3) any visual asset and where it lives in the repo.
 
 ---
 
 ## Slide 1 — Title
 
 **On screen:**
-- Title: *System Prompts as a Mitigation for Sycophancy in LLMs*
-- Subtitle: *An empirical study using syco-bench*
+- Title: *System Prompts vs. Sycophancy in LLMs*
+- Subtitle: *Effective on user-deference, powerless on delusion*
 - Authors: Isaiah Dawkins, [Teammate 2], [Teammate 3]
 - Course: Trustworthy AI
 
-**Speaker (~30s):** Quick intro of team and the one-sentence research question: "Can the hidden instructions we give an AI actually make it less of a yes-man?"
+**Speaker (~30s):** Quick intro of team and the one-sentence research question: "Can the hidden instructions we give an AI actually make it less of a yes-man — and does it matter for the failure modes we care about most?"
 
 ---
 
@@ -29,18 +29,18 @@ Each slide block below lists: (1) what's on the slide, (2) what the speaker says
 >
 > **What it should say:** No, actually — the Earth orbits the sun. We've known this since Copernicus.
 
-**Speaker (~60s):** Lead with this example. Make the audience feel the wrongness of the first response. Note that the first response *sounds* nice — it's polite, validates the user, finds something to agree with. That's exactly the problem. This is **sycophancy**, and it's a documented failure mode of every major LLM.
+**Speaker (~60s):** Lead with this example. Make the audience feel the wrongness of the first response. Note that the first response *sounds* nice — it validates the user, finds something to agree with. That's exactly the problem. This is **sycophancy**, and it's a documented failure mode of every major LLM.
 
 ---
 
-## Slide 3 — Why this matters (Trustworthy AI framing)
+## Slide 3 — Why it matters (Trustworthy AI framing)
 
 **On screen:** Three boxes:
 1. **Wrong information delivered confidently** — undermines AI as a source of truth
 2. **Validation of delusional / unsafe beliefs** — direct psychological harm
 3. **Reduced reliability for high-stakes use** — medical, legal, financial
 
-**Speaker (~75s):** Sycophancy is a textbook trust failure. It maps onto each of these harms. The April 2025 GPT-4o rollback by OpenAI is the highest-profile recent example — within days of release, the model was found amplifying users' delusional and unsafe thinking, and OpenAI rolled it back. This isn't theoretical.
+**Speaker (~75s):** Sycophancy is a textbook trust failure. It maps onto each of these harms. The April 2025 GPT-4o rollback by OpenAI is the highest-profile recent example — within days of release, the model was found amplifying users' delusional and unsafe thinking, and OpenAI rolled it back. Foreshadow: by the end of this talk, you'll see that one of these three harms is *much harder to fix with prompts* than the others.
 
 ---
 
@@ -110,75 +110,103 @@ Each slide block below lists: (1) what's on the slide, (2) what the speaker says
 
 ---
 
-## Slide 9 — Headline result
+## Slide 9 — Headline result (the grouped bar chart)
 
 **On screen:** Figure 1 (`experiment_results/figures/fig1_grouped_bars.png`) — the 4-panel grouped bar chart of sycophancy by model and prompt, one panel per sub-test.
 
-**Speaker (~120s):** [PLACEHOLDER: walk through what the chart shows once we have the data. Talking points to cover:
-- Confirm the `agreeable` (red) bar is highest across the board → measurement is sensitive to direction.
-- Identify the prompt(s) that consistently produced the lowest bars per panel.
-- Note any panel where no prompt helped or where one model resisted intervention.]
+**Speaker (~150s):** Spend time on this slide. Three things to point out:
 
-This is the most important slide. Spend time on it.
+1. **The red bar (`agreeable`) is the tallest in most panels.** Our manipulation check worked — telling the model to be supportive massively increased sycophancy. Especially Grok and Qwen on Mirror, where the bar shoots up to 9 out of 10.
 
----
+2. **Look at the Mirror panel for Claude vs Qwen.** All four anti-sycophancy prompts on Claude (left side of Mirror panel) are *taller* than the gray baseline — we made it WORSE. On Qwen (middle), the same prompts are *shorter* than baseline — we made it BETTER. **Same prompts, opposite effects.**
 
-## Slide 10 — Where each prompt worked (heatmap)
+3. **Look at the Delusion panel.** The bars within each model are nearly the same height. Whatever we did with the system prompt barely budged delusion-acceptance.
 
-**On screen:** Figure 2 (`experiment_results/figures/fig2_heatmaps.png`) — 4-panel heatmap of prompt × model interaction, blue = reduced sycophancy, red = increased.
-
-**Speaker (~75s):** [PLACEHOLDER: discuss interaction patterns.
-- Which prompt has the most consistent blue across models? That's the most generalizable.
-- Which model resists intervention most? Why might that be?
-- Are there any prompt × model cells where things got *worse*? Surprising.]
+That third observation is what we'll spend most of the rest of the talk on.
 
 ---
 
-## Slide 11 — The trade-off (this is the cool one)
+## Slide 10 — The Mirror direction-flip across models
 
-**On screen:** Figure 5 (`experiment_results/figures/fig5_tradeoff.png`) — the Pickside × Delusion scatter, with the "ideal" region annotated as bottom-center.
+**On screen:** Slice of Figure 2 (Mirror heatmap from `fig2_heatmaps.png`) and a table:
 
-**Speaker (~90s):** This is the most important conceptual point of the talk.
+| Model | Best anti-sycophancy effect on Mirror |
+|---|---|
+| Claude Haiku 4.5 | direct: **worsened** (Δ = +2.23, p = 10⁻⁴) |
+| Grok 3 mini | direct: **worsened** (Δ = +2.40, p = 10⁻⁵) |
+| Qwen 2.5 72B | role: **improved** (Δ = −1.10, p = 0.007) |
 
-> "Less sycophancy is not automatically better. A model that disagrees with you on every issue is also untrustworthy — it's just a different kind of broken."
+**Speaker (~90s):** Statistical evidence for the direction-flip. The same prompt — "you are a careful, independent reviewer" — significantly worsens Mirror on two models and significantly improves it on a third.
 
-The X-axis is Pickside — positive means the model takes the user's side too readily; negative means it disagrees against them too readily; near zero is balanced. The Y-axis is Delusion-acceptance — lower means the model corrects false beliefs.
+Hypothesis: it's baseline-dependent. Qwen has high intrinsic mirroring (2.73), so an instruction to "disagree" can pull it down. Claude and Grok have low intrinsic mirroring; the instruction makes them more *reactive* to whatever the user just said, constructing positions in response to the user rather than independent of them. Pushes the score up.
 
-The bottom-center is where you want to be: balanced, not contrarian, AND corrects delusions. [PLACEHOLDER: which prompts land closest to that region? Any prompts overshoot into the bottom-LEFT quadrant — i.e., become contrarian to fix sycophancy?]
-
-This is the result that matters most for deployment.
-
----
-
-## Slide 12 — Replication and cross-test independence
-
-**On screen:** Figure 4 (`experiment_results/figures/fig4_correlations.png`) — two correlation matrices side-by-side.
-
-**Speaker (~60s):** Sanity check: our `none`-baseline numbers are consistent with Duffy's published results. And we replicate his observation that the four sub-tests are largely independent — sycophancy isn't one trait, it's a cluster of related behaviors. **Implication for deployers:** an anti-sycophancy intervention that fixes one facet may not fix the others. You have to pick the prompt for the failure mode you care about.
+This is a strong H4 result: **deployers cannot lift "the best anti-sycophancy prompt" from a paper and expect it to generalize across models.**
 
 ---
 
-## Slide 13 — What we're not claiming (limitations)
+## Slide 11 — The headline finding: delusion was unmoved
+
+**On screen:**
+
+| Model | Best anti-sycophancy delusion result | Holm p |
+|---|---|---|
+| Claude Haiku 4.5 | role: Δ = −0.05 | 1.00 |
+| Grok 3 mini | reasoning: Δ = −0.35 | 0.77 |
+| Qwen 2.5 72B | principle: Δ = −0.10 | 0.93 |
+
+Plus a side-by-side bar showing: 13 cells in the experiment reached p < .05 across the other 3 sub-tests; **0 cells reached p < .05 on Delusion.**
+
+**Speaker (~120s):** This is the slide that should land. Across **45 prompt × model comparisons** on the delusion sub-test, **none** produced a statistically significant change after correction.
+
+We have strong evidence that prompts move user-deference (Pickside) and opinion-mirroring (Mirror). We have **no evidence** that prompts move delusion-acceptance.
+
+The dimension most directly tied to the harms we showed on slide 3 — validating false beliefs, amplifying delusional thinking, the things that drove the OpenAI 4o rollback — is the dimension most resistant to prompt-level intervention.
+
+This is consequential. It means that for deployers worried about the *safety-critical* failure mode of LLMs, system prompts alone are insufficient. The fix has to come at training time (constitutional AI, targeted RLHF, etc.) — not at deployment time.
+
+Note the n = 20 caveat: small samples can hide small effects. But our largest delusion effect was Cliff's δ = 0.18; we can rule out clinically large changes, even if we can't rule out small ones.
+
+---
+
+## Slide 12 — The trade-off plot
+
+**On screen:** Figure 5 (`experiment_results/figures/fig5_tradeoff.png`) — Pickside × Delusion scatter.
+
+**Speaker (~90s):** Each dot is one (model, prompt) cell. X-axis: Pickside (positive = takes user's side too readily; negative = contrarian). Y-axis: Delusion (low = corrects, high = plays along).
+
+The desirable region is bottom-center: balanced AND corrects delusions.
+
+Three observations:
+1. **Models live in distinct vertical bands.** Claude (circles) at the bottom — naturally corrects delusions. Qwen (squares) at the top — naturally accepts them. No prompt moves any model out of its band.
+2. **The bottom-center region is mostly Claude's natural baseline,** not earned by intervention.
+3. **Anti-sycophancy prompts can push cells leftward into contrarian territory** (negative Pickside on Claude `direct`, Grok `direct` and `reasoning`) — but they can't pull anything *downward* on the delusion axis.
+
+**Prompts shift the type of failure but cannot remove the safety-critical one.**
+
+---
+
+## Slide 13 — Limitations and what we're not claiming
 
 **On screen:** Bullets:
+- n = 20 on delusion → can't detect small effects (but can rule out large ones)
 - Single-turn only — real conversations compound
 - Three mid-tier models — no GPT-4o or Claude Opus
 - LLM judges have their own biases
-- 40 items per test → wide CIs
 - English only
-- We don't measure helpfulness — anti-sycophancy could reduce warmth
+- Whosaid metric had ceiling effects (model agrees with everything → metric collapses)
+- Lower-sycophancy is not automatically better
 
-**Speaker (~60s):** Quick walkthrough. The most important: lower-sycophancy is not the same as better. The Trustworthy AI lesson here is calibration, not maximization.
+**Speaker (~60s):** Quick walkthrough. Most important: the delusion null is at small n. We can rule out *large* prompt effects on delusion, but not *small* ones. Future work would need ~5× the items.
 
 ---
 
 ## Slide 14 — Conclusion + take-home
 
 **On screen:**
-- **Yes**, system prompts can reduce sycophancy — [PLACEHOLDER: by an average of X across N cells].
-- **But**: best prompt depends on the model and on the sub-test.
-- **The trade-off matters more than the magnitude:** push too hard for honesty, get contrarianism.
-- For deployers: pick the prompt for the failure mode you care about.
+- **Yes**, system prompts can reduce some forms of sycophancy — significantly so for Pickside on Grok and Qwen; for Mirror on Qwen.
+- **But:** best prompt depends on the model; same prompt can have opposite effects across models.
+- **And on the safety-critical dimension** — delusion-acceptance — **prompts alone are insufficient.** Fixing that requires intervention at training time.
+- For deployers: prompt engineering buys you facet-specific mitigation, not universal safety.
 - Code, data, figures: github.com/isaiahdawkins12/syco-bench-prompts
 
 **Speaker (~45s):** Three sentences. Then "Questions?"
@@ -187,7 +215,7 @@ This is the result that matters most for deployment.
 
 ## Slide 15 (optional backup) — Methodology details for Q&A
 
-**On screen:** Stats summary table from `tables/table3_pairwise_vs_none.csv` excerpt, plus list of pre-registered hypotheses.
+**On screen:** Stats summary table from `tables/table3_pairwise_vs_none.csv` excerpt, plus list of the pre-registered hypotheses with which were supported.
 
 **Speaker:** Only if asked about specific numbers, p-values, or design choices.
 
@@ -211,7 +239,8 @@ This is the result that matters most for deployment.
 - **Key transitions to rehearse:**
   - Slide 2 → 3: from vivid example to "this is a real, well-documented problem."
   - Slide 8 → 9: from "how we measure" to "what we found." Pause.
-  - Slide 11: don't rush. The trade-off is the main intellectual point.
-- **If running short on time:** cut Slide 12 (correlation replication is a sanity check, not a finding). Don't cut the trade-off.
-- **If running long:** condense Slide 5 (audience can read the test descriptions on screen).
-- **What to bring up only if asked:** specific p-values, Cliff's delta, judge-panel composition rationale, why we excluded GPT-4o.
+  - **Slide 10 → 11**: pivot from "model-specific story" to "the safety-critical null." This is the most important transition — the delusion null is the biggest finding and slide 10 should set up the contrast.
+  - Slide 11 → 12: "And here's why that null matters in practice."
+- **If running short on time:** cut Slide 12 (the trade-off plot is supportive, not load-bearing). Don't cut Slides 10 or 11.
+- **If running long:** condense Slide 5 (audience can read the test descriptions on screen); condense Slide 7.
+- **What to bring up only if asked:** specific p-values, Cliff's delta, judge-panel composition rationale, why we excluded GPT-4o, why the `agreeable` Whosaid result moves the wrong way (ceiling effect).
