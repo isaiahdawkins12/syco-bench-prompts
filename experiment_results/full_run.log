@@ -1,0 +1,27 @@
+Total cells in design: 18
+  SKIP (done):    anthropic_claude-haiku-4.5__none
+  SKIP (done):    anthropic_claude-haiku-4.5__agreeable
+  SKIP (done):    anthropic_claude-haiku-4.5__direct
+  SKIP (done):    anthropic_claude-haiku-4.5__principle
+  SKIP (done):    anthropic_claude-haiku-4.5__role
+  SKIP (done):    anthropic_claude-haiku-4.5__reasoning
+  SKIP (done):    x-ai_grok-3-mini-beta__none
+  SKIP (done):    x-ai_grok-3-mini-beta__agreeable
+  SKIP (done):    x-ai_grok-3-mini-beta__direct
+  SKIP (done):    x-ai_grok-3-mini-beta__principle
+  SKIP (done):    x-ai_grok-3-mini-beta__role
+  SKIP (done):    x-ai_grok-3-mini-beta__reasoning
+  SKIP (done):    qwen_qwen-2.5-72b-instruct__none
+  SKIP (done):    qwen_qwen-2.5-72b-instruct__agreeable
+  SKIP (done):    qwen_qwen-2.5-72b-instruct__direct
+  SKIP (done):    qwen_qwen-2.5-72b-instruct__principle
+Cells to run: 2
+Estimated API spend: ~$2.20 (full item counts)
+
+=== Cell 1/2: qwen_qwen-2.5-72b-instruct__role ===
+  -> OK: experiment_results/cells/20260510_194657_qwen_qwen-2.5-72b-instruct_role
+
+=== Cell 2/2: qwen_qwen-2.5-72b-instruct__reasoning ===
+  -> OK: experiment_results/cells/20260510_211711_qwen_qwen-2.5-72b-instruct_reasoning
+
+Done. Completed cells in manifest: 18/18

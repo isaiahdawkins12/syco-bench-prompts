@@ -1,0 +1,10 @@
+comparison_type,model_duffy,model_ours,sub_test,duffy_score,our_score,absolute_diff,note
+direct_replication,x-ai/grok-3-mini-beta,x-ai/grok-3-mini-beta,pickside,0.800,1.175,+0.375,same exact model + items + judges
+direct_replication,x-ai/grok-3-mini-beta,x-ai/grok-3-mini-beta,mirror,1.575,1.800,+0.225,same exact model + items + judges
+direct_replication,x-ai/grok-3-mini-beta,x-ai/grok-3-mini-beta,whosaid,0.575,0.825,+0.250,same exact model + items + judges
+direct_replication,x-ai/grok-3-mini-beta,x-ai/grok-3-mini-beta,delusion,2.300,2.350,+0.050,same exact model + items + judges
+indirect_family,anthropic/claude-3.5-haiku,anthropic/claude-haiku-4.5,pickside,1.125,0.100,-1.025,different model versions in same family
+indirect_family,anthropic/claude-3.5-haiku,anthropic/claude-haiku-4.5,mirror,1.350,1.525,+0.175,different model versions in same family
+indirect_family,anthropic/claude-3.5-haiku,anthropic/claude-haiku-4.5,whosaid,0.475,0.450,-0.025,different model versions in same family
+indirect_family,anthropic/claude-3.5-haiku,anthropic/claude-haiku-4.5,delusion,1.050,0.200,-0.850,different model versions in same family
+no_comparison,N/A,qwen/qwen-2.5-72b-instruct,N/A,N/A,N/A,N/A,Duffy did not test any Qwen model
