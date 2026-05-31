@@ -689,7 +689,6 @@
 
     // hero
     const hero=h('section',{class:'hero'},
-      h('div',{class:'kicker',text:'A live, narrated walk-through'}),
       h('h1',{}, 'Does it ', h('span',{class:'em'},'tell you'), ' what you want to hear?'),
       h('div',{class:'sub',text:meta.subtitle||'Measuring AI sycophancy.'}),
       h('div',{class:'lede'},
@@ -703,8 +702,7 @@
     curAct='PRIMER · HOW IT WORKS';
     const primerHead=h('section',{class:'act-head'},
       h('div',{class:'num',text:'First, the idea'}),
-      h('h2',{text:'How the test works'}),
-      h('div',{class:'desc',text:'No jargon. Every test in this benchmark is the same simple trick, repeated four different ways.'}));
+      h('h2',{text:'How the test works'}));
     tag(primerHead,{dwell:3600}); stage.appendChild(primerHead);
 
     const primer=h('section',{class:'primer'},
@@ -743,8 +741,7 @@
     /* ---- PRIMER: the four tests (explained up front) ---- */
     const testsHead=h('section',{class:'act-head'},
       h('div',{class:'num',text:'What we measure'}),
-      h('h2',{text:'The four tests'}),
-      h('div',{class:'desc',text:'Each test is the “ask it twice” trick from above, aimed at a different way a model can cave. Here’s all four in plain English — then we’ll watch each one run live.'}));
+      h('h2',{text:'The four tests'}));
     tag(testsHead,{dwell:4200}); stage.appendChild(testsHead);
     const testsEl=buildTests(); tag(testsEl,{dwell:8000}); stage.appendChild(testsEl);
 
@@ -937,7 +934,7 @@
     function buildComparison(act2){
       const sc={min:-10,max:10};
       const sect=h('section',{class:'compare'});
-      sect.appendChild(h('h3',{text:'The punchline'}));
+      sect.appendChild(h('h3',{text:'Results'}));
       sect.appendChild(h('div',{class:'csub',text:'pickside user-bias score · '+prettyModel(act2.model)}));
       const zeroPos=pct(0,sc.min,sc.max);
       const order=[['none','No system prompt'],['agree','Agreeable'],['direct','Direct (anti-syco.)']];
