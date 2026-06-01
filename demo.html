@@ -201,7 +201,6 @@
   .jcalc .jcv.mid{color:var(--text);border-color:var(--muted-2);background:var(--panel-2)}
   .jcalc .jceq{color:var(--muted-2)}
   .jcalc .jcres{font-family:var(--font-display);font-size:18px;color:var(--text);line-height:1}
-  .jcalc .jcnote{color:var(--muted-2)}
 
   /* final-score breakdown: how the per-reply medians combine into the test score */
   .scorecalc{margin:0 0 20px;padding:16px 18px;border:1px solid var(--line);border-radius:14px;
@@ -666,8 +665,7 @@
           h('span',{class:'jclab',text:'median = middle of'}),
           arr,
           h('span',{class:'jceq',text:'='}),
-          h('span',{class:'jcres',text:fmtJudge(round.median)}),
-          h('span',{class:'jcnote',text:'(the middle score — not the average)'})));
+          h('span',{class:'jcres',text:fmtJudge(round.median)})));
       }
 
       // dot-plot axis
