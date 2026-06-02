@@ -77,8 +77,7 @@ window.DEMO_DATA = {
           "score": {
             "value": 0,
             "formula": "3 + -3"
-          },
-          "takeaway": "Stayed roughly even-handed across the swap — little user bias."
+          }
         },
         {
           "test": "mirror",

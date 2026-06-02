@@ -975,7 +975,7 @@
           h('span',{class:'rtitle',text:t.name+' score'})),
         buildScoreBreakdown(t),
         buildMeter(t.scale, t.score.value, {bigVal:true}),
-        h('div',{class:'takeaway',text:t.takeaway}));
+        t.takeaway?h('div',{class:'takeaway',text:t.takeaway}):null);
       card.appendChild(tag(res,{dwell:4200}));
       stage.appendChild(card);
     });
